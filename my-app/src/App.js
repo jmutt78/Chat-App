@@ -1,6 +1,19 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import * as firebase from 'firebase';
+
+src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"
+// Initialize Firebase
+var config = {
+  apiKey: "AIzaSyCggDmX5xxGObHIXcl5qUukrvS54Nl5IAM",
+  authDomain: "bloc-chat-7eb30.firebaseapp.com",
+  databaseURL: "https://bloc-chat-7eb30.firebaseio.com",
+  projectId: "bloc-chat-7eb30",
+  storageBucket: "bloc-chat-7eb30.appspot.com",
+  messagingSenderId: "462192422440"
+};
+firebase.initializeApp(config);
 
 class App extends Component {
   render() {
