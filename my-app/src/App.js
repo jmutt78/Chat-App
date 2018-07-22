@@ -3,6 +3,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import * as firebase from "firebase";
 import RoomList from "./components/RoomList.js";
+import MessageList from "./components/MessageList.js";
 
 // Initialize Firebase
 var config = {
@@ -36,7 +37,9 @@ class App extends Component {
           <RoomList firebase={firebase} />
           <nav />
         </aside>
-        <span id="main">Main goes here</span>
+        <span id="main">
+				<MessageList firebase={firebase} activeRoom={this.state.activeRoom} />
+				</span>
       </div>
     );
   }
