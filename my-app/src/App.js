@@ -3,6 +3,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import * as firebase from "firebase";
 import RoomList from "./components/RoomList.js";
+import MessageList from "./components/MessageList.js";
 
 // Initialize Firebase
 var config = {
@@ -18,25 +19,31 @@ firebase.initializeApp(config);
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      null: null,
-    };
+    this.state = { activeRoom: null };
+  }
+
+  pickActiveRoom(room) {
+		this.setState({ activeRoom: room });
+		console.log(this.state.activeRoom + " from App.js");
   }
 
   render() {
+
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Mutt Chat</h1>
+          <h1 className="App-title">Koop Chat</h1>
         </header>
         <aside id="sidebar">
           <div id="logo" />
           <div id="slogan">Chat Rooms</div>
-          <RoomList firebase={firebase} />
+          <RoomList firebase={firebase} activeRoom={this.state.activeRoom} pickActiveRoom={this.pickActiveRoom.bind(this)} />
           <nav />
         </aside>
-        <span id="main">Main goes here</span>
+        <span id="main">
+				<MessageList firebase={firebase} activeRoom={this.state.activeRoom} />
+				</span>
       </div>
     );
   }
