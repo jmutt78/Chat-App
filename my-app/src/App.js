@@ -33,7 +33,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Koop Chat</h1>
+          <h1 className="App-title">Mutt Chat</h1>
         </header>
         <aside id="sidebar">
           <div id="logo" />
