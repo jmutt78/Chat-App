@@ -28,7 +28,6 @@ class App extends Component {
   }
 
   render() {
-
     return (
       <div className="App">
         <header className="App-header">
@@ -42,7 +41,7 @@ class App extends Component {
           <nav />
         </aside>
         <span id="main">
-				<MessageList firebase={firebase} activeRoom={this.state.activeRoom} />
+				<MessageList firebase={firebase} activeRoom={this.state.activeRoom} user={this.state.user} />
 				</span>
       </div>
     );

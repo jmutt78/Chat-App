@@ -20,6 +20,16 @@ class MessageList extends Component {
     console.log("activeRoomMessages called");
   }
 
+  addNewMessage(e) {
+  		e.preventDefault();
+  		if (this.valiadateMessage(this.state.newMessage)) {
+  			this.messagesRef.push({ message: this.state.newMessage });
+  			console.log("New Message Added!");
+  			this.setState({ newMessage: "" });
+  		}
+  	}
+
+
   componentDidMount() {
     console.log("MessageList component mounted");
     console.log(this.props.activeRoom);
