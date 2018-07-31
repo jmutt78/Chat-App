@@ -24,21 +24,13 @@ class MessageList extends Component {
         });
     }
 
-//    handleChange(e) {
-//        e.preventDefault();
-//        this.setState({
-//          username: this.props.currentUser.displayName,
-//          content: e.target.value,
-//          sentAt: this.props.firebase.database.ServerValue.TIMESTAMP,
-//          roomId: this.props.activeRoom.key
-//        });
-//    }
-
     render () {
         return (
             <section className="message-list">
                 <ul>
                     { this.state.messages.map ( (message, index) => {
+                      console.log(this.props.activeRoom);
+                        console.log(message.roomId);
                         if (this.props.activeRoom && this.props.activeRoom === message.roomId) {
                             return <li key={index}>{message.username}: {message.content} {message.sentAt}</li>
                       }
