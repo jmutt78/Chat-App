@@ -1,68 +1,53 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 class MessageList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      messages: [],
-      activeRoomMessages: [],
-    };
-    this.messagesRef = this.props.firebase.database().ref("messages");
-  }
+    constructor(props) {
+        super(props);
+        this.state = {
+            messages: [],
+            message: {
+                username: " ",
+                content: " ",
+                roomId: " ",
+                sentAt: this.props.firebase.database.ServerValue.TIMESTAMP
+            }
+        };
 
-  activeRoomMessages(activeRoom) {
-    if (!activeRoom) {
-      return;
+        this.messagesRef = this.props.firebase.database().ref('messages');
     }
-    this.setState({ activeRoomMessages: this.state.messages.filter(message => message.key === activeRoom.key) }, () =>
-      this.scrollToBottom()
-    );
-    console.log("activeRoomMessages called");
-  }
 
-  addNewMessage(e) {
-  		e.preventDefault();
-  		if (this.valiadateMessage(this.state.newMessage)) {
-  			this.messagesRef.push({ message: this.state.newMessage });
-  			console.log("New Message Added!");
-  			this.setState({ newMessage: "" });
-  		}
-  	}
+    componentDidMount () {
+        this.messagesRef.on('child_added', snapshot => {
+            const message = snapshot.val();
+            message.key = snapshot.key;
+            this.setState({ messages: this.state.messages.concat(message) })
+        });
+    }
 
+//    handleChange(e) {
+//        e.preventDefault();
+//        this.setState({
+//          username: this.props.currentUser.displayName,
+//          content: e.target.value,
+//          sentAt: this.props.firebase.database.ServerValue.TIMESTAMP,
+//          roomId: this.props.activeRoom.key
+//        });
+//    }
 
-  componentDidMount() {
-    console.log("MessageList component mounted");
-    console.log(this.props.activeRoom);
-    this.messagesRef.on("child_added", snapshot => {
-      const message = snapshot.val();
-      message.key = snapshot.key;
-      this.setState({ messages: this.state.messages.concat(message) }, () => {
-        this.activeRoomMessages(this.props.activeRoom);
-      });
-    });
-  }
+    render () {
+        return (
+            <section className="message-list">
+                <ul>
+                    { this.state.messages.map ( (message, index) => {
+                        if (this.props.activeRoom && this.props.activeRoom === message.roomId) {
+                            return <li key={index}>{message.username}: {message.content} {message.sentAt}</li>
+                      }
+                    })}
+                </ul>
+            </section>
+        );
+    }
 
-  scrollToBottom() {
-    this.bottomOfMessages.scrollIntoView();
-    console.log("scrollToBottom called");
-  }
-
-  render() {
-    return (
-      <main id="message-component">
-        <h2 className="active-room">{this.state.activeRoom}</h2>
-        <ul id="message-list">
-          {this.state.activeRoomMessages.map(message => (
-            <li key={message.key}>
-              <section className="user-name">{message.name}</section>
-              <section className="content">{message.content}</section>
-              <section className="sentAt">{message.sentAt}</section>
-            </li>
-          ))}
-          <div ref={thisDiv => (this.bottomOfMessages = thisDiv)} />
-        </ul>
-      </main>
-    );
-  }
 }
+
 export default MessageList;
