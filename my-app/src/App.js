@@ -32,6 +32,7 @@ class App extends Component {
 
     return (
       <div className="App">
+
       <aside className="list-chat-rooms">
         <RoomList firebase ={firebase} activeRoom ={this.activeRoom.bind(this)} />
       </aside>
@@ -42,6 +43,7 @@ class App extends Component {
 
         <MessageList firebase = {firebase} activeRoom={this.state.activeRoom.key} /> : (null)
       }
+
       </div>
     );
   }
