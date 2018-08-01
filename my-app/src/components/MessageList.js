@@ -24,22 +24,20 @@ class MessageList extends Component {
         });
     }
 
-    render () {
-        return (
-            <section className="message-list">
-                <ul>
-                    { this.state.messages.map ( (message, index) => {
-                      console.log(this.props.activeRoom);
-                        console.log(message.roomId);
-                        if (this.props.activeRoom && this.props.activeRoom === message.roomId) {
-                            return <li key={index}>{message.username}: {message.content} {message.sentAt}</li>
-                      }
-                    })}
-                </ul>
-            </section>
-        );
+    render() {
+      const activeRoom = this.props.activeRoom;
+      const messageList = this.state.messages
+      .filter(message => message.roomId === activeRoom)
+      .map(message => {
+        return <li className="current-chat-message" key={message.key}>{message.content}</li>
+      })
+      return(
+        <div className="chat-messages">
+          <ul>{messageList}</ul>
+        </div>
+
+      );
     }
+  }
 
-}
-
-export default MessageList;
+  export default MessageList;

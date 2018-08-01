@@ -17,41 +17,33 @@ var config = {
 firebase.initializeApp(config);
 
 class App extends Component {
-  constructor(props) {
-    super(props);
+  constructor(props){
+    super(props)
+
     this.state = {
-      activeRoom: " "
-    }
-
-    this.setActiveRoom = this.setActiveRoom.bind(this);
-
+      activeRoom: '',
+    };
   }
-
-  setActiveRoom (room) {
-    this.setState(
-      {
-        activeRoom: room
-      }
-    );
-  }
-
+  activeRoom(room) {
+    this.setState({ activeRoom: room })
+}
   render() {
+    const displayMessages = this.state.activeRoom;
+
     return (
       <div className="App">
-        <h1>Bloc Chat</h1>
-        <h2>Available Rooms:</h2>
-        <RoomList
-          firebase= { firebase }
-          setActiveRoom={ this.setActiveRoom }
-        />
-        <MessageList
-          firebase= { firebase }
-          activeRoom= { this.state.activeRoom }
-          messages= { this.state.messages }
-        />
+      <aside className="list-chat-rooms">
+        <RoomList firebase ={firebase} activeRoom ={this.activeRoom.bind(this)} />
+      </aside>
+      <h3 className="active-chat-room">{this.state.activeRoom.name}
+      </h3>
+
+      { displayMessages ?
+
+        <MessageList firebase = {firebase} activeRoom={this.state.activeRoom.key} /> : (null)
+      }
       </div>
     );
   }
 }
-
 export default App;
