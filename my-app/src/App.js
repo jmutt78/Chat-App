@@ -44,6 +44,7 @@ setUser(user) {
     return (
       <div className="App">
       <User firebase={firebase} setUser={this.setUser} currentUser={currentUser} />
+
       <aside className="list-chat-rooms">
         <RoomList firebase ={firebase} activeRoom ={this.activeRoom.bind(this)} />
       </aside>
@@ -54,6 +55,7 @@ setUser(user) {
 
         <MessageList firebase = {firebase} activeRoom={this.state.activeRoom.key} /> : (null)
       }
+
       </div>
     );
   }
