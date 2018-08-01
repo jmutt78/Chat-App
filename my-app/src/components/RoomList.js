@@ -55,7 +55,7 @@ class RoomList extends Component {
             })}
 
           <form onSubmit={(event) => this.handleSubmit(event)}>
-            <input type="text" name="newroom" placeholder="New Room" value={this.state.newRoom} onChange={(event) => this.handleChange(event)} />
+            <input type="text" value={ this.state.newRoomName } name="newRoomName" placeholder="New Room Name" onChange={ this.handleChange.bind(this) } />
             <button type="submit" onClick={() => this.createRoom()}> Add Room </button>
           </form>
         </ul>

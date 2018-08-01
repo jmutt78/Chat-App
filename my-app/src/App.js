@@ -33,7 +33,6 @@ class App extends Component {
     this.setState({ activeRoom: room });
 
 }
-
 setUser(user) {
   this.setState({ user: user })
 
@@ -41,6 +40,7 @@ setUser(user) {
   render() {
     const displayMessages = this.state.activeRoom;
     const currentUser = this.state.user === null ? 'Guest' : this.state.user.displayName;
+
     return (
       <div className="App">
       <User firebase={firebase} setUser={this.setUser} currentUser={currentUser} />
@@ -53,7 +53,9 @@ setUser(user) {
 
       { displayMessages ?
 
-        <MessageList firebase = {firebase} activeRoom={this.state.activeRoom.key} /> : (null)
+        <MessageList firebase = {firebase}
+        activeRoom={this.state.activeRoom.key}
+        user={currentUser}/> : (null)
       }
 
       </div>
