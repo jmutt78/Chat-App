@@ -1,67 +1,65 @@
-import React, { Component } from "react";
 
+import React, { Component } from 'react';
+import './../App.css';
 
 class RoomList extends Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super (props)
+
     this.state = {
       rooms: [],
-          newRoomName:" ",
+      newRoomName: '',
+      name: ''
     };
-    this.roomsRef = this.props.firebase.database().ref("rooms");
-    this.addNewRoom = this.addNewRoom.bind(this);
 
-  }
+    this.roomsRef = this.props.firebase.database().ref('rooms');
 
-  addNewRoom(e) {
-  e.preventDefault();
-  if (this.validateRoomName(this.state.newRoomName)) {
-    this.roomsRef.push({ name: this.state.newRoomName });
-    console.log("New Room");
-    this.setState({ newRoomName: "" });
-  }
-}
+  };
 
   componentDidMount() {
-    this.roomsRef.on("child_added", snapshot => {
-      console.log(snapshot);
+    this.roomsRef.on('child_added', snapshot => {
       const room = snapshot.val();
       room.key = snapshot.key;
-      this.setState({ rooms: this.state.rooms.concat(room) })
+      this.setState({ rooms: this.state.rooms.concat(room) });
     });
   }
 
-  handleChange(e) {
-    e.preventDefault();
-    this.setState({ newRoomName: e.target.value });
+  handleChange(event) {
+    this.setState({ newRoomName: event.target.value });
   }
 
-  validateRoomName(newRoomName) {
-    const newRoomLength = newRoomName.trim().length;
-    if (newRoomLength > 0) {
-      return true;
-    } else {
-      return false;
-    }
+  handleSubmit(event) {
+    event.preventDefault();
+    if (!this.state.newRoomName) { return }
+  }
+
+  createRoom() {
+    this.roomsRef.push({
+      name: this.state.newRoomName
+    });
+  }
+
+  selectRoom(room){
+    this.props.activeRoom(room);
   }
 
   render() {
     return (
-      <section id="room-component">
-        <ul id="room-list">
-          {this.state.rooms.map((room, index) => (
-            <li key={index} className="roomname">
-              {room.name}
-            </li>
-          ))}
+      <section className= "room-list">
+        <div className= "side-bar-list-names">
+          <ul>
+            {this.state.rooms.map( (room, index) => {
+            return(
+              <div key= {room.key} onClick={(event) => this.selectRoom(room, event)}>{room.name}</div>
+            )
+            })}
+
+          <form onSubmit={(event) => this.handleSubmit(event)}>
+            <input type="text" name="newroom" placeholder="New Room" value={this.state.newRoom} onChange={(event) => this.handleChange(event)} />
+            <button type="submit" onClick={() => this.createRoom()}> Add Room </button>
+          </form>
         </ul>
-        <form id="addRoomForm" onSubmit={e => this.addNewRoom(e)}>
-          <fieldset>
-            <legend>Create New Chat Room</legend>
-            <input type="text" value={ this.state.newRoomName } name="newRoomName" placeholder="New Room Name" onChange={ this.handleChange.bind(this) } />
-            <input type="submit" value="+" />
-          </fieldset>
-        </form>
+        </div>
       </section>
     );
   }

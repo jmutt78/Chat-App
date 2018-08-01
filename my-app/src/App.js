@@ -17,32 +17,35 @@ var config = {
 firebase.initializeApp(config);
 
 class App extends Component {
-  constructor(props) {
-    super(props);
+  constructor(props){
+    super(props)
+
     this.state = {
-      null: null,
+      activeRoom: '',
     };
   }
-
+  activeRoom(room) {
+    this.setState({ activeRoom: room })
+}
   render() {
+    const displayMessages = this.state.activeRoom;
+
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Mutt Chat</h1>
-        </header>
-        <aside id="sidebar">
-          <div id="logo" />
-          <div id="slogan">Chat Rooms</div>
-          <RoomList firebase={firebase} />
-          <nav />
-        </aside>
-        <span id="main">
-				<MessageList firebase={firebase} activeRoom={this.state.activeRoom} />
-				</span>
+
+      <aside className="list-chat-rooms">
+        <RoomList firebase ={firebase} activeRoom ={this.activeRoom.bind(this)} />
+      </aside>
+      <h3 className="active-chat-room">{this.state.activeRoom.name}
+      </h3>
+
+      { displayMessages ?
+
+        <MessageList firebase = {firebase} activeRoom={this.state.activeRoom.key} /> : (null)
+      }
+
       </div>
     );
   }
 }
-
 export default App;
