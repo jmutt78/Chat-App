@@ -43,21 +43,27 @@ setUser(user) {
 
     return (
       <div className="App">
-      <User firebase={firebase} setUser={this.setUser} currentUser={currentUser} />
+
+
+      <div className="left-column">
+      <span className="top-nav">
+        <User firebase={firebase} setUser={this.setUser} currentUser={currentUser} />
+      </span>
 
       <aside className="list-chat-rooms">
-        <RoomList firebase ={firebase} activeRoom ={this.activeRoom.bind(this)} />
+        <RoomList firebase ={firebase} activeRoom ={this.activeRoom} />
       </aside>
-      <h3 className="active-chat-room">{this.state.activeRoom.name}
-      </h3>
+      </div>
+      <div className="right-column">
+
+
+      <h1 className="active-chat-room">{this.state.activeRoom.name}
+      </h1>
 
       { displayMessages ?
-
-        <MessageList firebase = {firebase}
-        activeRoom={this.state.activeRoom.key}
-        user={currentUser}/> : (null)
+        <MessageList firebase = {firebase} activeRoom={this.state.activeRoom.key} user={currentUser}/> : (null)
       }
-
+      </div>
       </div>
     );
   }

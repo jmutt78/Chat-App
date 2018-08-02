@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './../App.css';
 
 class MessageList extends Component {
     constructor(props) {
@@ -45,12 +46,21 @@ class MessageList extends Component {
         content: this.state.content
       });
     }
+    deleteMessage(messageKey) {
+      const message = this.props.firebase.database().ref('messages' + messageKey);
+      message.remove();
+      const remainingMessages= this.state.messages
+      .filter(message => message.key !== messageKey);
+      this.setState({ messages: remainingMessages });
+}
     render() {
       const activeRoom = this.props.activeRoom;
       const messageList = this.state.messages
       .filter(message => message.roomId === activeRoom)
       .map(message => {
-        return <li className="current-chat-message" key={message.key}>{message.content}</li>
+        return <div className="current-chat-message" key={message.key}>{message.content}
+        <button className="deleteMessage" onClick={() => this.deleteMessage(message.key)}>Delete</button>
+        </div>
       })
       return(
   <div className="chatroom-messages">
