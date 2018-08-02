@@ -31,7 +31,7 @@ class RoomList extends Component {
     event.preventDefault();
     if (!this.state.newRoomName) { return };
     this.setState({
-      newRoomName: ''
+      newRoom: " "
     });
   }
 
