@@ -1,5 +1,5 @@
-
 import React, { Component } from 'react';
+import './../App.css';
 
 class MessageList extends Component {
     constructor(props) {
@@ -10,7 +10,7 @@ class MessageList extends Component {
                 username: " ",
                 content: " ",
                 roomId: " ",
-                sentAt: this.props.firebase.database.ServerValue.TIMESTAMP
+                sentAt: " ",
             }
         };
 
@@ -24,22 +24,55 @@ class MessageList extends Component {
             this.setState({ messages: this.state.messages.concat(message) })
         });
     }
+    handleChange(event) {
+      this.setState({
+        username: this.props.user,
+        content: event.target.value,
+        sentAt: this.props.firebase.database.ServerValue.TIMESTAMP,
+        roomId: this.props.activeRoom
+      });
+    }
+    handleSubmit(event){
+      event.preventDefault();
+      if (!this.state.content) {return}
+    }
 
+    createNewMessage(event) {
+      event.preventDefault();
+      this.messagesRef.push({
+        username: this.state.username,
+        sentAt: this.state.sentAt,
+        roomId: this.state.roomId,
+        content: this.state.content
+      });
+    }
+    deleteMessage(messageKey) {
+      const message = this.props.firebase.database().ref('messages' + messageKey);
+      message.remove();
+      const remainingMessages= this.state.messages
+      .filter(message => message.key !== messageKey);
+      this.setState({ messages: remainingMessages });
+}
     render() {
       const activeRoom = this.props.activeRoom;
       const messageList = this.state.messages
       .filter(message => message.roomId === activeRoom)
       .map(message => {
-        return <li className="current-chat-message" key={message.key}>{message.content}</li>
+        return <div className="current-chat-message" key={message.key}>{message.content}
+        <button className="deleteMessage" onClick={() => this.deleteMessage(message.key)}>Delete</button>
+        </div>
       })
       return(
-        <div className="chat-messages">
-          <ul>{messageList}</ul>
-        </div>
+  <div className="chatroom-messages">
+    <div>{messageList}</div>
 
-      );
-    }
+      <form onSubmit={(event) => this.handleSubmit(event)}>
+      <input type="text" value={this.state.content} name="createNewMessage" placeholder="New Message" onChange={(event) => this.handleChange(event)} />
+      <button className="send-button" type="submit" onClick={(event) => this.createNewMessage(event)}>Send</button>
+    </form>
+  </div>
+    );
   }
+}
 
   export default MessageList;
-
