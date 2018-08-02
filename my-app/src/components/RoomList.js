@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import './../App.css';
 
@@ -30,7 +29,10 @@ class RoomList extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    if (!this.state.newRoomName) { return }
+    if (!this.state.newRoomName) { return };
+    this.setState({
+      newRoomName: ''
+    });
   }
 
   createRoom() {
@@ -39,8 +41,8 @@ class RoomList extends Component {
     });
   }
 
-  selectRoom(room){
-    this.props.activeRoom(room);
+  selectRoom(key){
+    this.props.activeRoom(key);
   }
 
   deleteRoom(roomKey) {
@@ -54,21 +56,22 @@ class RoomList extends Component {
   removeRoom(room) {
     this.roomsRef.child(room.key).remove();
   }
+
   render() {
     return (
       <section className= "room-list">
         <div className= "side-bar-list-names">
           <ul>
-            {this.state.rooms.map( (room, index) => {
+            {this.state.rooms.map( (room) => {
             return(
               <div key= {room.key} onClick={(event) => this.selectRoom(room, event)}>{room.name}
-              <button className="deleteRoom" onClick={(event) => {event.preventDefault(); this.deleteRoom(room.key)}}> Delete </button>
+              <button className="deleteRoom" onClick={(event) => {this.deleteRoom(room.key)}}> Delete </button>
               </div>
             )
             })}
 
           <form onSubmit={(event) => this.handleSubmit(event)}>
-            <input type="text" value={ this.state.newRoomName } name="newRoomName" placeholder="New Room Name" onChange={ this.handleChange.bind(this) } />
+            <input type="text" name="newroom" placeholder="New Room" value={this.state.newRoom} onChange={(event) => this.handleChange(event)} />
             <button type="submit" onClick={() => this.createRoom()}> Add Room </button>
           </form>
         </ul>
